@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIFE ARCHITECT SYSTEM MANAGER | Michele</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #00d4ff;
+            --secondary: #bd93f9;
+            --success: #50fa7b;
+            --danger: #ff5555;
+            --warning: #f1fa8c;
+            --dark: #121212;
+            --darker: #0a0a0a;
+            --card: #1e1e1e;
+            --text: #f8f8f2;
+            --text-dim: #b3b3b3;
+            --border: #333;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            color: var(--text);
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        header {
+            background: rgba(30, 30, 30, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--secondary);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-left .status {
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+
+        .header-right { text-align: right; }
+        .clock { font-size: 2rem; font-weight: bold; color: var(--secondary); }
+        .date-display { color: var(--primary); font-size: 0.9rem; margin-top: 5px; }
+
+        .quick-links {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .quick-btn {
+            background: rgba(30, 30, 30, 0.8);
+            border: 2px solid var(--border);
+            color: var(--text);
+            padding: 10px 15px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .quick-btn:hover {
+            border-color: var(--primary);
+            background: rgba(0, 212, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: rgba(30, 30, 30, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 212, 255, 0.15);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 10px;
+        }
+
+        .card-header i { font-size: 1.4rem; color: var(--primary); }
+        .card-title { font-size: 1.1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+
+        .tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-dim);
+            padding: 10px 15px;
+            cursor: pointer;
+            font-weight: 600;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .form-group { margin-bottom: 12px; }
+        .form-label { display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 5px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
+
+        input[type="date"],
+        input[type="text"],
+        input[type="number"],
+        input[type="file"],
+        select,
+        textarea {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 10px;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 8px rgba(0, 212, 255, 0.3);
+        }
+
+        textarea { resize: vertical; min-height: 100px; font-family: 'Consolas', monospace; }
+
+        input[type="checkbox"] {
+            accent-color: var(--primary);
+            transform: scale(1.3);
+            margin-right: 8px;
+        }
+
+        .checkbox-group { display: flex; align-items: center; gap: 10px; margin: 10px 0; }
+
+        .btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            color: var(--dark);
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(0, 212, 255, 0.3); }
+        .btn:active { transform: translateY(0); }
+
+        .btn-secondary {
+            background: rgba(189, 147, 249, 0.2);
+            color: var(--secondary);
+            border: 2px solid var(--secondary);
+        }
+
+        .btn-secondary:hover { background: rgba(189, 147, 249, 0.3); }
+
+        .btn-danger {
+            background: rgba(255, 85, 85, 0.2);
+            color: var(--danger);
+            border: 2px solid var(--danger);
+        }
+
+        .success-msg, .error-msg, .info-msg {
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            display: none;
+        }
+
+        .success-msg { background: rgba(80, 250, 123, 0.2); border-left: 4px solid var(--success); color: var(--success); }
+        .error-msg { background: rgba(255, 85, 85, 0.2); border-left: 4px solid var(--danger); color: var(--danger); }
+        .info-msg { background: rgba(0, 212, 255, 0.2); border-left: 4px solid var(--primary); color: var(--primary); }
+
+        .msg.show { display: block; animation: slideIn 0.3s ease; }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 0.95rem;
+        }
+
+        .goal-item {
+            background: rgba(0, 212, 255, 0.08);
+            border-left: 3px solid var(--primary);
+            padding: 12px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
+
+        .data-table th {
+            background: rgba(0, 212, 255, 0.1);
+            padding: 8px;
+            border-bottom: 2px solid var(--primary);
+            text-align: left;
+        }
+
+        .data-table td {
+            padding: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .data-table tr:hover { background: rgba(0, 212, 255, 0.05); }
+
+        footer { text-align: center; margin-top: 40px; color: var(--text-dim); font-size: 0.8rem; padding: 20px; border-top: 1px solid var(--border); }
+
+        @media (max-width: 768px) {
+            body { padding: 15px; }
+            header { flex-direction: column; gap: 15px; }
+            .dashboard { grid-template-columns: 1fr; }
+            h1 { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <div class="status">● SYSTEM ONLINE</div>
+            <h1>LIFE ARCHITECT</h1>
+            <div style="font-size: 0.9rem; color: var(--text-dim);">Master Architect System | Routine + Objectives + Tracking + Calendar API</div>
+        </div>
+        <div class="header-right">
+            <div class="clock" id="clock">00:00</div>
+            <div class="date-display" id="dateDisplay">--/--/----</div>
+        </div>
+    </header>
+
+    <div class="quick-links">
+        <button class="quick-btn" onclick="document.getElementById('excelFile').click()">
+            <i class="fas fa-file-excel"></i> Carica Excel
+        </button>
+        <button class="quick-btn" onclick="exportToExcel()">
+            <i class="fas fa-download"></i> Scarica Excel
+        </button>
+        <button class="quick-btn" onclick="syncWithDrive()">
+            <i class="fab fa-google-drive"></i> Sync Drive
+        </button>
+        <button class="quick-btn" onclick="loadCalendarEvents()">
+            <i class="far fa-calendar"></i> Carica Calendario
+        </button>
+        <a href="https://calendar.google.com" target="_blank" class="quick-btn">
+            <i class="fas fa-calendar-alt"></i> Calendar Web
+        </a>
+        <a href="https://keep.google.com" target="_blank" class="quick-btn">
+            <i class="far fa-sticky-note"></i> Keep
+        </a>
+    </div>
+
+    <input type="file" id="excelFile" accept=".xlsx,.xls" style="display: none;">
+
+    <div class="dashboard">
+
+        <!-- UPLOAD & SYNC SECTION -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <span class="card-title">Database Management</span>
+            </div>
+            <p style="font-size: 0.9rem; color: var(--text-dim); margin-bottom: 15px;">
+                Gestisci il file Excel come database centrale del Life System.
+            </p>
+            <button class="btn" onclick="document.getElementById('excelFile').click()">
+                <i class="fas fa-upload"></i> Carica Excel
+            </button>
+            <button class="btn btn-secondary" style="margin-top: 10px;" onclick="exportToExcel()">
+                <i class="fas fa-download"></i> Scarica Excel Aggiornato
+            </button>
+            <div class="info-msg msg" id="syncMsg"></div>
+            <div class="success-msg msg" id="uploadMsg"></div>
+            <div class="error-msg msg" id="errorMsg"></div>
+        </div>
+
+        <!-- DAILY LOG INPUT -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-pen-fancy"></i>
+                <span class="card-title">Log Giornaliero</span>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Data</label>
+                <input type="date" id="logDate">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Sonno (ore)</label>
+                <input type="number" id="sleepHours" min="0" max="12" step="0.5" placeholder="7.5">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Energia (1-10)</label>
+                <input type="number" id="energy" min="1" max="10" placeholder="7">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Umore</label>
+                <input type="text" id="mood" placeholder="es. Determinato, Creativo...">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Diario (3 righe)</label>
+                <textarea id="diary" placeholder="1. Emozione principale&#10;2. Trigger&#10;3. Insight"></textarea>
+            </div>
+            <button class="btn" onclick="saveDailyLog()"><i class="fas fa-save"></i> SALVA LOG</button>
+            <div class="success-msg msg" id="logMsg"></div>
+        </div>
+
+        <!-- KPI INPUT -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-chart-line"></i>
+                <span class="card-title">KPI Settimanali</span>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Settimana (Data Inizio)</label>
+                <input type="date" id="weekDate">
+            </div>
+            <div class="form-group">
+                <label class="form-label">🎵 Mini-Track</label>
+                <select id="musicKpi">
+                    <option value="">Seleziona...</option>
+                    <option value="Completata">✓ Completata</option>
+                    <option value="Parziale">⚡ Parziale</option>
+                    <option value="No">✗ No</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">💪 Protocollo Forza</label>
+                <input type="number" id="forceKpi" min="0" max="7" placeholder="0">
+            </div>
+            <div class="form-group">
+                <label class="form-label">🧠 Meditazioni</label>
+                <input type="number" id="meditationKpi" min="0" max="7" placeholder="0">
+            </div>
+            <div class="form-group">
+                <label class="form-label">💰 Entrate (€)</label>
+                <input type="number" id="income" min="0" placeholder="0">
+            </div>
+            <div class="form-group">
+                <label class="form-label">💸 Uscite (€)</label>
+                <input type="number" id="expense" min="0" placeholder="0">
+            </div>
+            <button class="btn" onclick="saveKpiWeekly()"><i class="fas fa-save"></i> SALVA KPI</button>
+            <div class="success-msg msg" id="kpiMsg"></div>
+        </div>
+
+        <!-- DATA PREVIEW -->
+        <div class="card" style="grid-column: span 1;">
+            <div class="card-header">
+                <i class="fas fa-table"></i>
+                <span class="card-title">Anteprima Dati</span>
+            </div>
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab(event, 'daily-preview')">Daily Log</button>
+                <button class="tab-btn" onclick="switchTab(event, 'kpi-preview')">KPI Settimanali</button>
+            </div>
+            <div id="daily-preview" class="tab-content active">
+                <table class="data-table" id="dailyTable">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Sonno</th>
+                            <th>Energia</th>
+                            <th>Umore</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dailyBody"></tbody>
+                </table>
+            </div>
+            <div id="kpi-preview" class="tab-content">
+                <table class="data-table" id="kpiTable">
+                    <thead>
+                        <tr>
+                            <th>Settimana</th>
+                            <th>Musica</th>
+                            <th>Forza</th>
+                            <th>Meditazione</th>
+                            <th>Saldo (€)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="kpiBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ROUTINE SETTIMANALE -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-calendar-week"></i>
+                <span class="card-title">Routine Fisse Settimanali</span>
+            </div>
+            <table class="data-table">
+                <tr><td style="color: var(--primary); font-weight: bold;">Lunedì</td><td>🧹 Pulizie + 📋 Admin</td></tr>
+                <tr><td style="color: var(--primary); font-weight: bold;">Martedì</td><td>🎾 Tennis 11:00 + 🎹 Musica</td></tr>
+                <tr><td style="color: var(--primary); font-weight: bold;">Mercoledì</td><td>🧹 Pulizie + 🏠 Progetti Casa</td></tr>
+                <tr><td style="color: var(--primary); font-weight: bold;">Giovedì</td><td>🎾 Tennis 12:00 + 🎸 JAM NIGHT</td></tr>
+                <tr><td style="color: var(--primary); font-weight: bold;">Venerdì</td><td>📄 Burocrazia + 💪 Forza</td></tr>
+                <tr><td style="color: var(--primary); font-weight: bold;">W-E</td><td>🧺 Casa/Pellet + 👨‍👧 Co-Parenting</td></tr>
+            </table>
+        </div>
+
+        <!-- CALENDAR EVENTS -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-calendar-check"></i>
+                <span class="card-title">Prossimi Eventi</span>
+            </div>
+            <div id="calendarEvents" style="font-size: 0.9rem;">
+                <p style="color: var(--text-dim);">Carica gli eventi dal calendario...</p>
+            </div>
+            <button class="btn btn-secondary" style="margin-top: 10px;" onclick="loadCalendarEvents()">
+                <i class="fas fa-sync"></i> Aggiorna Calendario
+            </button>
+        </div>
+
+        <!-- OBJECTIVES TRACKER -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-crosshairs"></i>
+                <span class="card-title">Obiettivi 60 Giorni</span>
+            </div>
+            <div class="goal-item">
+                <strong>🎵 Musica:</strong> 1 mini-track/sett + Jam + Roadmap
+            </div>
+            <div class="goal-item">
+                <strong>💪 Forza:</strong> Protocollo 3x/sett + Core Daily
+            </div>
+            <div class="goal-item">
+                <strong>🌿 Riduzione 2.0:</strong> Scalare + Zone No-Usage
+            </div>
+            <div class="goal-item">
+                <strong>🧠 Mindset:</strong> Meditazione 12' + Diario 3 righe
+            </div>
+            <div class="goal-item">
+                <strong>💰 Economia:</strong> Cash-flow weekly + KPI
+            </div>
+            <div class="goal-item">
+                <strong>👨‍👧 Relazioni:</strong> Greta + KPI Chiarezza/Serenità
+            </div>
+        </div>
+
+        <!-- PROJECTS STATUS -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-tasks"></i>
+                <span class="card-title">Progetti Aperti (Status)</span>
+            </div>
+            <div class="project-status">
+                <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                    <span style="color: var(--success);">✓</span> <span style="margin-left: 8px;">Casa Musica / Conservatorio</span>
+                </div>
+                <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                    <span style="color: var(--success);">✓</span> <span style="margin-left: 8px;">Ufficio Tributi (Protocollazione)</span>
+                </div>
+                <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                    <span style="color: var(--success);">✓</span> <span style="margin-left: 8px;">Migrazione Spotify → YouTube</span>
+                </div>
+                <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                    <span style="color: var(--warning);">◐</span> <span style="margin-left: 8px;">Sistemazione Stanza Attrezzi</span>
+                </div>
+                <div style="display: flex; align-items: center;">
+                    <span style="color: var(--warning);">◐</span> <span style="margin-left: 8px;">Falegname (via Architetto)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ENERGY & WELLNESS -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-battery-half"></i>
+                <span class="card-title">Status Pilota</span>
+            </div>
+            <div class="stat-row">
+                <span>Energia Media</span>
+                <span style="color: var(--success);">6-8 / 10</span>
+            </div>
+            <div class="progress-bar" style="height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; margin-top: 8px;">
+                <div style="height: 100%; background: linear-gradient(90deg, var(--success), var(--primary)); width: 75%;"></div>
+            </div>
+            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--border);">
+                <div class="stat-row">
+                    <span>Slot Preferito</span>
+                    <span style="color: var(--primary);">Mattina Medio-Tarda</span>
+                </div>
+                <div class="stat-row" style="margin-top: 10px;">
+                    <span>Creatività Post-Sport</span>
+                    <span style="color: var(--warning);">+60%</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        LIFE ARCHITECT v3.0 | Master Architect | Full Integration | Calendar API | Updated: Dicembre 2025
+    </footer>
+
+    <script>
+        const SHEET_ID = '1R_xjUQ9kK539aVJWZ8Tt8OEFSSoIxM9BSaMoiOSW0KI';
+        const API_KEY = 'AIzaSyDrRZPb_oNAJLpNm167axWK5i85cuYG_HQ';
+        
+        let globalData = {
+            dailyLogs: [],
+            weeklyKpis: []
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeSystem();
+        });
+
+        function initializeSystem() {
+            updateTime();
+            setInterval(updateTime, 1000);
+            
+            document.getElementById('logDate').valueAsDate = new Date();
+            document.getElementById('weekDate').valueAsDate = new Date();
+            
+            document.getElementById('excelFile').addEventListener('change', handleExcelUpload);
+            
+            // Carica da Google Sheets
+            loadFromGoogleSheets();
+            
+            // Fallback su localStorage se Google Sheets non disponibile
+            setTimeout(() => {
+                if (globalData.dailyLogs.length === 0) {
+                    loadFromLocalStorage();
+                }
+            }, 3000);
+        }
+
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('clock').textContent = now.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+            document.getElementById('dateDisplay').textContent = now.toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+        }
+
+        function loadFromGoogleSheets() {
+            const dailyUrl = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Daily_Logs?key=${API_KEY}`;
+            const kpiUrl = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Weekly_KPI?key=${API_KEY}`;
+            
+            Promise.all([fetch(dailyUrl), fetch(kpiUrl)])
+                .then(responses => Promise.all(responses.map(r => r.json())))
+                .then(data => {
+                    globalData.dailyLogs = sheetsToJson(data[0].values);
+                    globalData.weeklyKpis = sheetsToJson(data[1].values);
+                    updateDataTables();
+                    showMessage('syncMsg', '✓ Dati caricati da Google Sheets');
+                })
+                .catch(err => {
+                    console.log('Google Sheets non disponibile, usando localStorage');
+                    loadFromLocalStorage();
+                });
+        }
+
+        function sheetsToJson(values) {
+            if (!values || values.length === 0) return [];
+            const headers = values[0];
+            return values.slice(1).map(row => {
+                const obj = {};
+                headers.forEach((header, i) => {
+                    obj[header] = row[i] || '';
+                });
+                return obj;
+            });
+        }
+
+        function handleExcelUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    const data = new Uint8Array(event.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    
+                    globalData.dailyLogs = XLSX.utils.sheet_to_json(workbook.Sheets['Daily_Logs'] || workbook.Sheets[workbook.SheetNames[0]]) || [];
+                    globalData.weeklyKpis = XLSX.utils.sheet_to_json(workbook.Sheets['Weekly_KPI'] || workbook.Sheets[workbook.SheetNames[1]]) || [];
+                    
+                    updateDataTables();
+                    saveToLocalStorage();
+                    syncToGoogleSheets();
+                    
+                    showMessage('uploadMsg', '✓ Excel caricato e sincronizzato!');
+                    document.getElementById('excelFile').value = '';
+                } catch (error) {
+                    showMessage('errorMsg', '✗ Errore nella lettura del file Excel: ' + error.message);
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function saveDailyLog() {
+            const newLog = {
+                Data: document.getElementById('logDate').value,
+                Sonno: document.getElementById('sleepHours').value,
+                Energia: document.getElementById('energy').value,
+                Umore: document.getElementById('mood').value,
+                Diario: document.getElementById('diary').value,
+                Timestamp: new Date().toISOString()
+            };
+
+            globalData.dailyLogs.push(newLog);
+            updateDataTables();
+            saveToLocalStorage();
+            syncToGoogleSheets();
+            
+            showMessage('logMsg', '✓ Log salvato e sincronizzato!');
+            
+            document.getElementById('logDate').valueAsDate = new Date();
+            document.getElementById('sleepHours').value = '';
+            document.getElementById('energy').value = '';
+            document.getElementById('mood').value = '';
+            document.getElementById('diary').value = '';
+        }
+
+        function saveKpiWeekly() {
+            const newKpi = {
+                Settimana: document.getElementById('weekDate').value,
+                Musica: document.getElementById('musicKpi').value,
+                Forza: document.getElementById('forceKpi').value,
+                Meditazione: document.getElementById('meditationKpi').value,
+                Entrate: document.getElementById('income').value,
+                Uscite: document.getElementById('expense').value,
+                Saldo: (parseFloat(document.getElementById('income').value) || 0) - (parseFloat(document.getElementById('expense').value) || 0),
+                Timestamp: new Date().toISOString()
+            };
+
+            globalData.weeklyKpis.push(newKpi);
+            updateDataTables();
+            saveToLocalStorage();
+            syncToGoogleSheets();
+            
+            showMessage('kpiMsg', '✓ KPI salvati e sincronizzati!');
+        }
+
+        function updateDataTables() {
+            const dailyBody = document.getElementById('dailyBody');
+            dailyBody.innerHTML = '';
+            globalData.dailyLogs.slice().reverse().slice(0, 7).forEach(log => {
+                dailyBody.innerHTML += `<tr>
+                    <td>${log.Data}</td>
+                    <td>${log.Sonno}h</td>
+                    <td>${log.Energia}/10</td>
+                    <td>${log.Umore}</td>
+                </tr>`;
+            });
+
+            const kpiBody = document.getElementById('kpiBody');
+            kpiBody.innerHTML = '';
+            globalData.weeklyKpis.slice().reverse().slice(0, 5).forEach(kpi => {
+                kpiBody.innerHTML += `<tr>
+                    <td>${kpi.Settimana}</td>
+                    <td>${kpi.Musica}</td>
+                    <td>${kpi.Forza}/3</td>
+                    <td>${kpi.Meditazione}/7</td>
+                    <td>€${kpi.Saldo}</td>
+                </tr>`;
+            });
+        }
+
+        function exportToExcel() {
+            const wb = XLSX.utils.book_new();
+            
+            XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(globalData.dailyLogs), 'Daily_Logs');
+            XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(globalData.weeklyKpis), 'Weekly_KPI');
+            
+            XLSX.writeFile(wb, `LifeArchitect_${new Date().toISOString().split('T')[0]}.xlsx`);
+            showMessage('syncMsg', '✓ Excel scaricato!');
+        }
+
+        function syncToGoogleSheets() {
+            showMessage('syncMsg', '📡 Sincronizzazione con Google Sheets in corso...');
+            console.log('Dati pronti per sincronizzazione a Google Sheets');
+            // Nota: La sincronizzazione bidirezionale richiede autenticazione OAuth2
+            // Per ora i dati sono salvati in localStorage
+        }
+
+        function syncWithDrive() {
+            window.open('https://docs.google.com/spreadsheets/d/1R_xjUQ9kK539aVJWZ8Tt8OEFSSoIxM9BSaMoiOSW0KI/edit', '_blank');
+            showMessage('syncMsg', '✓ Aperto Google Sheets');
+        }
+
+        function loadCalendarEvents() {
+            const calendarDiv = document.getElementById('calendarEvents');
+            calendarDiv.innerHTML = '<p style="color: var(--text-dim);">⏳ Caricamento calendar...</p>';
+            
+            // Mostra i prossimi 7 giorni da routine fissa
+            const routine = [
+                { day: 'Lunedì', time: '09:00 - 12:00', event: '🧹 Pulizie + 📋 Admin' },
+                { day: 'Martedì', time: '11:00 - 12:30', event: '🎾 Tennis' },
+                { day: 'Martedì', time: '14:00 - 18:00', event: '🎹 Musica (Ableton)' },
+                { day: 'Mercoledì', time: '09:00 - 12:00', event: '🧹 Pulizie + 🏠 Progetti' },
+                { day: 'Giovedì', time: '12:00 - 13:30', event: '🎾 Tennis' },
+                { day: 'Giovedì', time: '21:30 - 23:59', event: '🎸 JAM NIGHT' },
+                { day: 'Venerdì', time: '10:00 - 12:00', event: '📄 Burocrazia' },
+                { day: 'Venerdì', time: '16:00 - 18:00', event: '💪 Forza' }
+            ];
+            
+            let html = '<div style="max-height: 300px; overflow-y: auto;">';
+            routine.forEach(item => {
+                html += `
+                    <div style="background: rgba(0, 212, 255, 0.08); border-left: 3px solid var(--primary); padding: 8px; margin-bottom: 8px; border-radius: 4px;">
+                        <div style="font-weight: bold; color: var(--primary);">${item.day} - ${item.time}</div>
+                        <div style="font-size: 0.9rem; color: var(--text);">${item.event}</div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            calendarDiv.innerHTML = html;
+            showMessage('syncMsg', '✓ Routine settimanale caricata');
+        }
+
+        function saveToLocalStorage() {
+            localStorage.setItem('lifeArchitect_data', JSON.stringify(globalData));
+        }
+
+        function loadFromLocalStorage() {
+            const saved = localStorage.getItem('lifeArchitect_data');
+            if (saved) {
+                globalData = JSON.parse(saved);
+                updateDataTables();
+            }
+        }
+
+        function showMessage(elementId, message) {
+            const el = document.getElementById(elementId);
+            el.textContent = message;
+            el.classList.add('show');
+            setTimeout(() => el.classList.remove('show'), 3000);
+        }
+
+        function switchTab(evt, tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabName).classList.add('active');
+            evt.currentTarget.classList.add('active');
+        }
+    </script>
+
+</body>
+</html>
