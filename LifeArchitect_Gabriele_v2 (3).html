@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIFE ARCHITECT SYSTEM — Gabriele Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0e27;
+            --bg-card: #1a1f3a;
+            --bg-accent: #16213e;
+            --accent-blue: #00d4ff;
+            --accent-purple: #bd93f9;
+            --accent-green: #50fa7b;
+            --accent-orange: #ffb86c;
+            --accent-red: #ff5555;
+            --text-main: #f8f8f2;
+            --text-dim: #b3b3b3;
+        }
+
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #0f1528 100%);
+            color: var(--text-main);
+            padding: 20px;
+            min-height: 100vh;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* SMOOTH SCROLLBAR */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(189, 147, 249, 0.05);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-purple);
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-blue);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--accent-purple);
+            padding-bottom: 20px;
+            background: linear-gradient(90deg, transparent, rgba(189, 147, 249, 0.08), transparent);
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header-left { flex: 1; }
+
+        .system-status {
+            font-size: 0.75rem;
+            color: var(--accent-green);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+            box-shadow: 0 0 8px var(--accent-green);
+        }
+
+        @keyframes pulse {
+            0%, 100% { 
+                opacity: 1;
+                box-shadow: 0 0 8px var(--accent-green);
+            }
+            50% { 
+                opacity: 0.4;
+                box-shadow: 0 0 4px var(--accent-green);
+            }
+        }
+
+        h1 { 
+            font-size: 2.5rem; 
+            font-weight: 900; 
+            margin: 8px 0;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+
+        .subtitle { 
+            color: var(--accent-orange); 
+            font-size: 0.85rem; 
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .header-right { 
+            text-align: right;
+            animation: slideDown 0.6s ease-out 0.1s backwards;
+        }
+
+        #clock { 
+            font-size: 2rem; 
+            font-weight: 900;
+            color: var(--accent-blue);
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            letter-spacing: 2px;
+        }
+
+        #date { 
+            color: var(--accent-purple);
+            font-weight: 600;
+            margin-top: 5px;
+            font-size: 0.85rem;
+        }
+
+        /* TABS */
+        .tab-nav {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid rgba(189, 147, 249, 0.1);
+            padding-bottom: 12px;
+            animation: slideDown 0.6s ease-out 0.2s backwards;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: 1px solid rgba(189, 147, 249, 0.2);
+            color: var(--text-dim);
+            padding: 10px 18px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 6px;
+            position: relative;
+        }
+
+        .tab-btn:hover {
+            border-color: var(--accent-purple);
+            color: var(--accent-purple);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(189, 147, 249, 0.15);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--accent-purple), #a76fd0);
+            color: var(--bg-dark);
+            border-color: var(--accent-purple);
+            box-shadow: 0 8px 24px rgba(189, 147, 249, 0.25);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 3px;
+            background: var(--accent-purple);
+            border-radius: 2px;
+        }
+
+        /* TAB CONTENT */
+        .tab-content {
+            display: none;
+            animation: fadeInUp 0.4s ease-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(15px);
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0);
+            }
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            animation: fadeInUp 0.4s ease-out 0.1s backwards;
+        }
+
+        /* CARDS */
+        .card {
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-accent) 100%);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(189, 147, 249, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+        }
+
+        .card:hover {
+            border-color: rgba(189, 147, 249, 0.3);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(189, 147, 249, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 18px;
+            border-bottom: 2px solid rgba(189, 147, 249, 0.15);
+            padding-bottom: 14px;
+        }
+
+        .card-header i { 
+            margin-right: 14px; 
+            color: var(--accent-blue); 
+            font-size: 1.6rem;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover .card-header i {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .card-title { 
+            font-weight: 800; 
+            font-size: 1.1rem; 
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        /* INPUTS */
+        .tracker-section {
+            background: rgba(0, 212, 255, 0.04);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border-left: 4px solid var(--accent-blue);
+            transition: all 0.3s ease;
+        }
+
+        .tracker-section:hover {
+            background: rgba(0, 212, 255, 0.07);
+            border-left-color: var(--accent-purple);
+        }
+
+        .tracker-label {
+            font-weight: 700;
+            color: var(--accent-orange);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+        }
+
+        .input-group {
+            margin-bottom: 12px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        textarea,
+        select {
+            width: 100%;
+            background: rgba(37, 37, 53, 0.6);
+            border: 1px solid rgba(189, 147, 249, 0.2);
+            color: var(--text-main);
+            padding: 12px 14px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+        }
+
+        input:hover,
+        textarea:hover,
+        select:hover {
+            border-color: rgba(189, 147, 249, 0.4);
+            background: rgba(37, 37, 53, 0.8);
+        }
+
+        input:focus, 
+        textarea:focus, 
+        select:focus {
+            outline: none;
+            border-color: var(--accent-purple);
+            background: rgba(37, 37, 53, 0.9);
+            box-shadow: 0 0 16px rgba(189, 147, 249, 0.2), inset 0 0 8px rgba(189, 147, 249, 0.05);
+            transform: translateY(-2px);
+        }
+
+        textarea {
+            resize: vertical;
+            height: 100px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        /* BUTTONS */
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            flex: 1;
+            min-width: 140px;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.85rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, var(--accent-green), #3fd060);
+            color: var(--bg-dark);
+            box-shadow: 0 8px 20px rgba(80, 250, 123, 0.2);
+        }
+
+        .btn-save:hover {
+            background: linear-gradient(135deg, #4ae86b, #42e575);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px rgba(80, 250, 123, 0.3);
+        }
+
+        .btn-export {
+            background: linear-gradient(135deg, var(--accent-blue), #00b8d4);
+            color: var(--bg-dark);
+            box-shadow: 0 8px 20px rgba(0, 212, 255, 0.2);
+        }
+
+        .btn-export:hover {
+            background: linear-gradient(135deg, #00e5ff, #00d4e8);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px rgba(0, 212, 255, 0.3);
+        }
+
+        /* STATUS MESSAGES */
+        .status-msg {
+            font-size: 0.85rem;
+            margin-top: 12px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: none;
+            animation: slideDown 0.3s ease-out;
+            border-left: 4px solid;
+            backdrop-filter: blur(10px);
+        }
+
+        .status-msg.success {
+            background: rgba(80, 250, 123, 0.1);
+            color: var(--accent-green);
+            border-left-color: var(--accent-green);
+        }
+
+        .status-msg.error {
+            background: rgba(255, 85, 85, 0.1);
+            color: var(--accent-red);
+            border-left-color: var(--accent-red);
+        }
+
+        /* LOG ENTRIES */
+        .log-entry {
+            background: linear-gradient(135deg, rgba(189, 147, 249, 0.05), rgba(0, 212, 255, 0.05));
+            border-left: 4px solid var(--accent-orange);
+            padding: 16px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .log-entry:hover {
+            transform: translateX(4px);
+            border-left-color: var(--accent-purple);
+            background: linear-gradient(135deg, rgba(189, 147, 249, 0.1), rgba(0, 212, 255, 0.1));
+            box-shadow: 0 4px 12px rgba(189, 147, 249, 0.1);
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            color: var(--text-dim);
+            font-size: 0.8rem;
+            border-top: 1px solid rgba(189, 147, 249, 0.1);
+            padding-top: 20px;
+            animation: fadeInUp 0.6s ease-out 0.4s backwards;
+        }
+
+        footer p {
+            margin: 4px 0;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            #clock { font-size: 1.5rem; }
+            .grid { grid-template-columns: 1fr; }
+            .btn-group { flex-direction: column; }
+            .btn { min-width: 100%; }
+            .tab-btn {
+                flex: 1;
+                min-width: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <div class="system-status">
+                <div class="status-dot"></div>
+                SYSTEM ONLINE
+            </div>
+            <h1>⚙️ LIFE ARCHITECT</h1>
+            <div class="subtitle">Gabriele's Daily Dashboard</div>
+        </div>
+        <div class="header-right">
+            <div id="clock">00:00:00</div>
+            <div id="date">--/--/----</div>
+        </div>
+    </header>
+
+    <div class="tab-nav">
+        <button class="tab-btn active" onclick="switchTab('dashboard')">📊 Dashboard</button>
+        <button class="tab-btn" onclick="switchTab('dailytracker')">📝 Today</button>
+        <button class="tab-btn" onclick="switchTab('logs')">📋 History</button>
+        <button class="tab-btn" onclick="switchTab('goals')">🎯 Obiettivi</button>
+    </div>
+
+    <div id="dashboard" class="tab-content active">
+        <div class="grid">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <div class="card-title">Status</div>
+                </div>
+                <div style="font-size: 0.9rem; line-height: 2;">
+                    <div>✓ Cloud Sync: Attivo</div>
+                    <div>✓ Database: Connesso</div>
+                    <div id="totalLogsCard" style="color: var(--accent-blue); font-weight: 600;">📊 Logs: 0</div>
+                    <div id="lastSyncCard" style="color: var(--accent-green); font-weight: 600;">🔄 Last Sync: —</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-bolt"></i>
+                    <div class="card-title">Quick Actions</div>
+                </div>
+                <button class="btn btn-save" onclick="switchTab('dailytracker')" style="width: 100%; margin-bottom: 10px;">📝 Compila Oggi</button>
+                <button class="btn btn-export" onclick="switchTab('logs')" style="width: 100%;">📋 Vedi History</button>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 20px;">
+            <div class="card-header">
+                <i class="fas fa-rocket"></i>
+                <div class="card-title">Benvenuto, Gabriele!</div>
+            </div>
+            <div style="font-size: 0.9rem; line-height: 1.8;">
+                <p>Il tuo Life Architect è pronto. Usa il tab "Today" per compilare il tuo daily log.</p>
+                <p style="color: var(--text-dim); margin-top: 12px;">Ogni giorno, registra i tuoi progressi e traccia le tue abitudini. I dati vengono salvati automaticamente nel cloud.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="dailytracker" class="tab-content">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-pencil-alt"></i>
+                <div class="card-title">Daily Log</div>
+            </div>
+
+            <div class="tracker-section">
+                <div class="tracker-label">📅 Base</div>
+                <div class="input-group">
+                    <label>Data:</label>
+                    <input type="date" id="logDate">
+                </div>
+                <div class="input-group">
+                    <label>Sonno (ore):</label>
+                    <input type="number" id="sleep" min="0" max="12" step="0.5">
+                </div>
+            </div>
+
+            <div class="tracker-section">
+                <div class="tracker-label">⚡ Energia (1-10)</div>
+                <div class="input-group">
+                    <label>Mattina:</label>
+                    <input type="number" id="energyMorning" min="1" max="10">
+                </div>
+                <div class="input-group">
+                    <label>Pomeriggio:</label>
+                    <input type="number" id="energyAfternoon" min="1" max="10">
+                </div>
+                <div class="input-group">
+                    <label>Sera:</label>
+                    <input type="number" id="energyEvening" min="1" max="10">
+                </div>
+            </div>
+
+            <div class="tracker-section">
+                <div class="tracker-label">🎭 Mood & Focus</div>
+                <div class="input-group">
+                    <label>Umore:</label>
+                    <input type="text" id="mood" placeholder="Energico, Calmo, Stressato...">
+                </div>
+                <div class="input-group">
+                    <label>Focus (3 righe max):</label>
+                    <textarea id="focus" placeholder="1) Primo obiettivo&#10;2) Secondo obiettivo&#10;3) Terzo obiettivo"></textarea>
+                </div>
+            </div>
+
+            <div class="tracker-section">
+                <div class="tracker-label">✅ Azioni</div>
+                <div class="input-group">
+                    <label>Azione 1:</label>
+                    <input type="text" id="action1" placeholder="Descrivi la prima azione completata">
+                </div>
+                <div class="input-group">
+                    <label>Azione 2:</label>
+                    <input type="text" id="action2" placeholder="Descrivi la seconda azione completata">
+                </div>
+                <div class="input-group">
+                    <label>Azione 3:</label>
+                    <input type="text" id="action3" placeholder="Descrivi la terza azione completata">
+                </div>
+                <div class="input-group">
+                    <label>Azione 4:</label>
+                    <input type="text" id="action4" placeholder="Descrivi la quarta azione completata">
+                </div>
+                <div class="input-group">
+                    <label>Azione 5:</label>
+                    <input type="text" id="action5" placeholder="Descrivi la quinta azione completata">
+                </div>
+            </div>
+
+            <div class="tracker-section">
+                <div class="tracker-label">📓 Diario (3 righe)</div>
+                <div class="input-group">
+                    <label>1) Emozione principale del giorno:</label>
+                    <input type="text" id="emotionMain" placeholder="Gioia, Frustrazione, etc.">
+                </div>
+                <div class="input-group">
+                    <label>2) Cosa l'ha attivata:</label>
+                    <input type="text" id="emotionTrigger" placeholder="Descrivi il trigger">
+                </div>
+                <div class="input-group">
+                    <label>3) Insight per domani:</label>
+                    <input type="text" id="emotionInsight" placeholder="Cosa mi porto a domani">
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-save" onclick="saveDailyLog()">💾 Salva & Sync</button>
+                <button class="btn btn-export" onclick="exportCSV()">📥 Export CSV</button>
+            </div>
+            <div class="status-msg" id="statusMsg"></div>
+        </div>
+    </div>
+
+    <div id="logs" class="tab-content">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-history"></i>
+                <div class="card-title">Recent Logs</div>
+            </div>
+            <div id="logsContainer" style="max-height: 700px; overflow-y: auto;">
+                <p style="color: var(--text-dim);">Loading...</p>
+            </div>
+            <button class="btn btn-export" onclick="loadRecentLogs()" style="width: 100%; margin-top: 20px;">🔄 Refresh</button>
+        </div>
+    </div>
+
+    <div id="goals" class="tab-content">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-rocket"></i>
+                <div class="card-title">Your Objectives</div>
+            </div>
+            <div style="font-size: 0.9rem; line-height: 2;">
+                <p>Aggiungi i tuoi obiettivi principali qui. Traccia il tuo progresso giorno per giorno usando la scheda "Today".</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>⚙️ Life Architect v2.2 | Cloud-Powered Dashboard</p>
+        <p>Dati sincronizzati automaticamente nel cloud</p>
+    </footer>
+
+    <script>
+        const JSONBIN_API_KEY = '';
+        const BIN_ID = '69307d46d0ea881f4010b0d3';
+        const JSONBIN_BASE_URL = 'https://api.jsonbin.io/v3';
+
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').textContent = now.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            document.getElementById('date').textContent = now.toLocaleDateString('it-IT', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        document.getElementById('logDate').valueAsDate = new Date();
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function showStatus(msg, isSuccess = true) {
+            const el = document.getElementById('statusMsg');
+            el.textContent = msg;
+            el.className = 'status-msg ' + (isSuccess ? 'success' : 'error');
+            setTimeout(() => el.className = 'status-msg', 5000);
+        }
+
+        async function saveDailyLog() {
+            if(!JSONBIN_API_KEY) {
+                showStatus('⚠️ Aggiungi il Master Key nel codice per sincronizzare!', false);
+                return;
+            }
+
+            const logDate = document.getElementById('logDate').value;
+            if(!logDate) {
+                showStatus('❌ Seleziona una data!', false);
+                return;
+            }
+
+            const newLog = {
+                date: logDate,
+                timestamp: new Date().toISOString(),
+                sleep: parseFloat(document.getElementById('sleep').value) || 0,
+                energyMorning: parseInt(document.getElementById('energyMorning').value) || 0,
+                energyAfternoon: parseInt(document.getElementById('energyAfternoon').value) || 0,
+                energyEvening: parseInt(document.getElementById('energyEvening').value) || 0,
+                mood: document.getElementById('mood').value || '',
+                focus: document.getElementById('focus').value || '',
+                action1: document.getElementById('action1').value || '',
+                action2: document.getElementById('action2').value || '',
+                action3: document.getElementById('action3').value || '',
+                action4: document.getElementById('action4').value || '',
+                action5: document.getElementById('action5').value || '',
+                emotionMain: document.getElementById('emotionMain').value || '',
+                emotionTrigger: document.getElementById('emotionTrigger').value || '',
+                emotionInsight: document.getElementById('emotionInsight').value || ''
+            };
+
+            try {
+                const response = await fetch(`${JSONBIN_BASE_URL}/b/${BIN_ID}`, {
+                    headers: { 'X-Master-Key': JSONBIN_API_KEY }
+                });
+
+                if(!response.ok) throw new Error('Load failed');
+
+                const data = await response.json();
+                const allLogs = data.record.dailyLogs || [];
+                allLogs.push(newLog);
+
+                const updateRes = await fetch(`${JSONBIN_BASE_URL}/b/${BIN_ID}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': JSONBIN_API_KEY
+                    },
+                    body: JSON.stringify({ ...data.record, dailyLogs: allLogs })
+                });
+
+                if(!updateRes.ok) throw new Error('Save failed');
+
+                showStatus('✓ Log salvato e sincronizzato nel cloud!', true);
+                document.getElementById('totalLogsCard').textContent = '📊 Logs: ' + allLogs.length;
+                document.getElementById('lastSyncCard').textContent = '🔄 Last Sync: ' + new Date().toLocaleTimeString('it-IT');
+
+                document.getElementById('logDate').valueAsDate = new Date();
+                document.getElementById('sleep').value = '';
+                document.getElementById('energyMorning').value = '';
+                document.getElementById('energyAfternoon').value = '';
+                document.getElementById('energyEvening').value = '';
+                document.getElementById('mood').value = '';
+                document.getElementById('focus').value = '';
+                document.getElementById('action1').value = '';
+                document.getElementById('action2').value = '';
+                document.getElementById('action3').value = '';
+                document.getElementById('action4').value = '';
+                document.getElementById('action5').value = '';
+                document.getElementById('emotionMain').value = '';
+                document.getElementById('emotionTrigger').value = '';
+                document.getElementById('emotionInsight').value = '';
+
+                loadRecentLogs();
+            } catch(e) {
+                showStatus('❌ Errore: ' + e.message, false);
+            }
+        }
+
+        async function loadRecentLogs() {
+            if(!JSONBIN_API_KEY) {
+                document.getElementById('logsContainer').innerHTML = '<p style="color: var(--accent-orange);">⚠️ Aggiungi il Master Key per visualizzare i log.</p>';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${JSONBIN_BASE_URL}/b/${BIN_ID}`, {
+                    headers: { 'X-Master-Key': JSONBIN_API_KEY }
+                });
+
+                if(!response.ok) throw new Error('Load failed');
+
+                const data = await response.json();
+                const logs = (data.record.dailyLogs || []).slice(-10).reverse();
+
+                let html = '';
+                if(logs.length === 0) {
+                    html = '<p style="color: var(--text-dim);">Nessun log ancora.</p>';
+                } else {
+                    logs.forEach(log => {
+                        html += `
+                            <div class="log-entry">
+                                <strong>📅 ${log.date}</strong><br>
+                                Sonno: ${log.sleep}h | Energia: ${log.energyMorning}-${log.energyAfternoon}-${log.energyEvening} | Umore: ${log.mood}<br>
+                                ${log.emotionMain}
+                            </div>
+                        `;
+                    });
+                }
+
+                document.getElementById('logsContainer').innerHTML = html;
+            } catch(e) {
+                document.getElementById('logsContainer').innerHTML = '<p style="color: var(--accent-red);">❌ Errore: ' + e.message + '</p>';
+            }
+        }
+
+        async function exportCSV() {
+            if(!JSONBIN_API_KEY) {
+                showStatus('⚠️ Aggiungi il Master Key nel codice!', false);
+                return;
+            }
+
+            try {
+                const response = await fetch(`${JSONBIN_BASE_URL}/b/${BIN_ID}`, {
+                    headers: { 'X-Master-Key': JSONBIN_API_KEY }
+                });
+
+                if(!response.ok) throw new Error('Load failed');
+
+                const data = await response.json();
+                const logs = data.record.dailyLogs || [];
+
+                let csv = 'Data,Sonno,En_Matt,En_Pom,En_Sera,Umore,Azione1,Azione2,Azione3,Azione4,Azione5,Emozione\n';
+                logs.forEach(log => {
+                    csv += `"${log.date}","${log.sleep}","${log.energyMorning}","${log.energyAfternoon}","${log.energyEvening}","${log.mood}","${log.action1}","${log.action2}","${log.action3}","${log.action4}","${log.action5}","${log.emotionMain}"\n`;
+                });
+
+                const blob = new Blob([csv], { type: 'text/csv' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'LifeArchitect_' + new Date().toISOString().slice(0, 10) + '.csv';
+                a.click();
+                window.URL.revokeObjectURL(url);
+            } catch(e) {
+                showStatus('❌ Errore export: ' + e.message, false);
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadRecentLogs();
+        });
+    </script>
+
+</body>
+</html>
