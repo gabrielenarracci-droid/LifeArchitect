@@ -1,9 +1,10 @@
+LifeArchitect_Gabriele_v3_STABLE.html
 <!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LIFE ARCHITECT — Gabriele Dashboard</title>
+    <title>LIFE ARCHITECT SYSTEM — Gabriele Dashboard</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
@@ -17,7 +18,6 @@
             --accent-red: #ff5555;
             --text-main: #f8f8f2;
             --text-dim: #b3b3b3;
-            --text-subtle: #8b8b8b;
         }
 
         * { 
@@ -30,22 +30,21 @@
         body {
             background: linear-gradient(135deg, var(--bg-dark) 0%, #0f1528 100%);
             color: var(--text-main);
-            padding: 16px;
+            padding: 20px;
             min-height: 100vh;
             overflow-x: hidden;
             scroll-behavior: smooth;
         }
 
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 10px;
         }
         ::-webkit-scrollbar-track {
             background: rgba(189, 147, 249, 0.05);
-            border-radius: 10px;
         }
         ::-webkit-scrollbar-thumb {
             background: var(--accent-purple);
-            border-radius: 10px;
+            border-radius: 5px;
         }
         ::-webkit-scrollbar-thumb:hover {
             background: var(--accent-blue);
@@ -55,10 +54,10 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 28px;
-            border-bottom: 2px solid rgba(189, 147, 249, 0.2);
-            padding-bottom: 18px;
-            background: linear-gradient(90deg, transparent, rgba(189, 147, 249, 0.06), transparent);
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--accent-purple);
+            padding-bottom: 20px;
+            background: linear-gradient(90deg, transparent, rgba(189, 147, 249, 0.08), transparent);
             animation: slideDown 0.6s ease-out;
         }
 
@@ -76,53 +75,51 @@
         .header-left { flex: 1; }
 
         .system-status {
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             color: var(--accent-green);
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 2.5px;
             display: flex;
             align-items: center;
             gap: 6px;
-            margin-bottom: 8px;
         }
 
         .status-dot {
-            width: 6px;
-            height: 6px;
+            width: 8px;
+            height: 8px;
             background: var(--accent-green);
             border-radius: 50%;
             animation: pulse 2s ease-in-out infinite;
-            box-shadow: 0 0 6px var(--accent-green);
+            box-shadow: 0 0 8px var(--accent-green);
         }
 
         @keyframes pulse {
             0%, 100% { 
                 opacity: 1;
-                box-shadow: 0 0 6px var(--accent-green);
+                box-shadow: 0 0 8px var(--accent-green);
             }
             50% { 
-                opacity: 0.3;
-                box-shadow: 0 0 3px var(--accent-green);
+                opacity: 0.4;
+                box-shadow: 0 0 4px var(--accent-green);
             }
         }
 
         h1 { 
-            font-size: 2.2rem; 
+            font-size: 2.5rem; 
             font-weight: 900; 
-            margin: 4px 0;
+            margin: 8px 0;
             background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: -0.5px;
+            letter-spacing: -1px;
         }
 
         .subtitle { 
             color: var(--accent-orange); 
-            font-size: 0.8rem; 
+            font-size: 0.85rem; 
             font-weight: 600;
             letter-spacing: 0.5px;
-            opacity: 0.9;
         }
 
         .header-right { 
@@ -133,91 +130,88 @@
         .header-actions {
             display: flex;
             gap: 10px;
-            margin-bottom: 12px;
+            margin-bottom: 15px;
             flex-wrap: wrap;
         }
 
         .quick-btn {
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.12), rgba(189, 147, 249, 0.12));
-            border: 1px solid rgba(0, 212, 255, 0.3);
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(189, 147, 249, 0.2));
+            border: 1px solid rgba(189, 147, 249, 0.3);
             color: var(--accent-blue);
             padding: 8px 14px;
             border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 600;
+            font-size: 0.8rem;
             cursor: pointer;
-            transition: all 0.25s ease;
+            transition: all 0.3s ease;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            white-space: nowrap;
         }
 
         .quick-btn:hover {
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(189, 147, 249, 0.2));
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.3), rgba(189, 147, 249, 0.3));
             border-color: var(--accent-blue);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 212, 255, 0.15);
         }
 
         #clock { 
-            font-size: 1.8rem; 
+            font-size: 2rem; 
             font-weight: 900;
             color: var(--accent-blue);
-            font-family: 'Courier New', monospace;
-            letter-spacing: 1px;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            letter-spacing: 2px;
         }
 
         #date { 
             color: var(--accent-purple);
             font-weight: 600;
-            margin-top: 4px;
-            font-size: 0.8rem;
+            margin-top: 5px;
+            font-size: 0.85rem;
         }
 
         .tab-nav {
             display: flex;
-            gap: 6px;
-            margin-bottom: 24px;
+            gap: 8px;
+            margin-bottom: 30px;
             flex-wrap: wrap;
-            border-bottom: 1px solid rgba(189, 147, 249, 0.08);
-            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(189, 147, 249, 0.1);
+            padding-bottom: 12px;
             animation: slideDown 0.6s ease-out 0.2s backwards;
         }
 
         .tab-btn {
             background: transparent;
-            border: 1px solid rgba(189, 147, 249, 0.15);
+            border: 1px solid rgba(189, 147, 249, 0.2);
             color: var(--text-dim);
-            padding: 9px 16px;
+            padding: 10px 18px;
             cursor: pointer;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            transition: all 0.25s ease;
+            letter-spacing: 1px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border-radius: 6px;
             position: relative;
         }
 
         .tab-btn:hover {
-            border-color: rgba(189, 147, 249, 0.4);
+            border-color: var(--accent-purple);
             color: var(--accent-purple);
-            transform: translateY(-1px);
-            background: rgba(189, 147, 249, 0.05);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(189, 147, 249, 0.15);
         }
 
         .tab-btn.active {
-            background: linear-gradient(135deg, var(--accent-purple), #a66fd0);
+            background: linear-gradient(135deg, var(--accent-purple), #a76fd0);
             color: var(--bg-dark);
             border-color: var(--accent-purple);
-            box-shadow: 0 6px 16px rgba(189, 147, 249, 0.2);
+            box-shadow: 0 8px 24px rgba(189, 147, 249, 0.25);
         }
 
         .tab-content {
             display: none;
-            animation: fadeInUp 0.3s ease-out;
+            animation: fadeInUp 0.4s ease-out;
         }
 
         .tab-content.active {
@@ -227,7 +221,7 @@
         @keyframes fadeInUp {
             from { 
                 opacity: 0; 
-                transform: translateY(12px);
+                transform: translateY(15px);
             }
             to { 
                 opacity: 1; 
@@ -237,86 +231,87 @@
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 18px;
-            animation: fadeInUp 0.3s ease-out 0.05s backwards;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            animation: fadeInUp 0.4s ease-out 0.1s backwards;
         }
 
         .card {
-            background: linear-gradient(135deg, rgba(26, 31, 58, 0.8), rgba(22, 33, 62, 0.8));
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(189, 147, 249, 0.08);
-            transition: all 0.25s ease;
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-accent) 100%);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(189, 147, 249, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             backdrop-filter: blur(10px);
         }
 
         .card:hover {
-            border-color: rgba(189, 147, 249, 0.2);
-            transform: translateY(-4px);
-            box-shadow: 0 12px 32px rgba(189, 147, 249, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+            border-color: rgba(189, 147, 249, 0.3);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(189, 147, 249, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08);
         }
 
         .card-header {
             display: flex;
             align-items: center;
-            margin-bottom: 16px;
-            border-bottom: 1px solid rgba(189, 147, 249, 0.1);
-            padding-bottom: 12px;
+            margin-bottom: 18px;
+            border-bottom: 2px solid rgba(189, 147, 249, 0.15);
+            padding-bottom: 14px;
         }
 
         .card-header i { 
-            margin-right: 12px; 
+            margin-right: 14px; 
             color: var(--accent-blue); 
-            font-size: 1.4rem;
-            transition: all 0.25s ease;
+            font-size: 1.6rem;
+            transition: all 0.3s ease;
         }
 
         .card:hover .card-header i {
-            transform: scale(1.08) rotate(3deg);
+            transform: scale(1.1) rotate(5deg);
         }
 
         .card-title { 
             font-weight: 800; 
-            font-size: 1rem; 
+            font-size: 1.1rem; 
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
         }
 
         .tracker-section {
-            background: rgba(0, 212, 255, 0.03);
-            border-radius: 8px;
-            padding: 14px;
-            margin-bottom: 14px;
-            border-left: 3px solid var(--accent-blue);
-            transition: all 0.25s ease;
+            background: rgba(0, 212, 255, 0.04);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border-left: 4px solid var(--accent-blue);
+            transition: all 0.3s ease;
         }
 
         .tracker-section:hover {
-            background: rgba(0, 212, 255, 0.06);
+            background: rgba(0, 212, 255, 0.07);
             border-left-color: var(--accent-purple);
         }
 
         .tracker-label {
             font-weight: 700;
             color: var(--accent-orange);
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             text-transform: uppercase;
-            font-size: 0.7rem;
-            letter-spacing: 1px;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
         }
 
         .input-group {
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
             color: var(--text-dim);
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             font-weight: 600;
+            transition: color 0.3s ease;
         }
 
         input[type="text"],
@@ -326,51 +321,54 @@
         textarea,
         select {
             width: 100%;
-            background: rgba(37, 37, 53, 0.5);
-            border: 1px solid rgba(189, 147, 249, 0.15);
+            background: rgba(37, 37, 53, 0.6);
+            border: 1px solid rgba(189, 147, 249, 0.2);
             color: var(--text-main);
-            padding: 10px 12px;
-            border-radius: 7px;
-            font-size: 0.85rem;
-            transition: all 0.25s ease;
+            padding: 12px 14px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
         }
 
         input:hover, textarea:hover, select:hover {
-            border-color: rgba(189, 147, 249, 0.3);
-            background: rgba(37, 37, 53, 0.7);
+            border-color: rgba(189, 147, 249, 0.4);
+            background: rgba(37, 37, 53, 0.8);
         }
 
         input:focus, textarea:focus, select:focus {
             outline: none;
             border-color: var(--accent-purple);
-            background: rgba(37, 37, 53, 0.8);
-            box-shadow: 0 0 12px rgba(189, 147, 249, 0.15);
+            background: rgba(37, 37, 53, 0.9);
+            box-shadow: 0 0 16px rgba(189, 147, 249, 0.2), inset 0 0 8px rgba(189, 147, 249, 0.05);
+            transform: translateY(-2px);
         }
 
         textarea {
             resize: vertical;
-            height: 90px;
+            height: 100px;
+            font-family: 'Segoe UI', sans-serif;
         }
 
         .btn-group {
             display: flex;
-            gap: 8px;
-            margin-top: 16px;
+            gap: 10px;
+            margin-top: 20px;
             flex-wrap: wrap;
         }
 
         .btn {
             flex: 1;
-            min-width: 130px;
-            padding: 11px 16px;
+            min-width: 140px;
+            padding: 14px 20px;
             border: none;
-            border-radius: 7px;
+            border-radius: 8px;
             font-weight: 700;
             cursor: pointer;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-size: 0.8rem;
-            transition: all 0.25s ease;
+            letter-spacing: 1px;
+            font-size: 0.85rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
         }
@@ -382,59 +380,60 @@
             left: 50%;
             width: 0;
             height: 0;
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 50%;
             transform: translate(-50%, -50%);
-            transition: width 0.5s, height 0.5s;
+            transition: width 0.6s, height 0.6s;
         }
 
         .btn:active::before {
-            width: 250px;
-            height: 250px;
+            width: 300px;
+            height: 300px;
         }
 
         .btn-save {
-            background: linear-gradient(135deg, var(--accent-green), #48dd6b);
+            background: linear-gradient(135deg, var(--accent-green), #3fd060);
             color: var(--bg-dark);
-            box-shadow: 0 6px 16px rgba(80, 250, 123, 0.18);
+            box-shadow: 0 8px 20px rgba(80, 250, 123, 0.2);
         }
 
         .btn-save:hover {
-            background: linear-gradient(135deg, #55ec78, #52f07d);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(80, 250, 123, 0.25);
+            background: linear-gradient(135deg, #4ae86b, #42e575);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px rgba(80, 250, 123, 0.3);
         }
 
         .btn-export {
-            background: linear-gradient(135deg, var(--accent-blue), #00c8e3);
+            background: linear-gradient(135deg, var(--accent-blue), #00b8d4);
             color: var(--bg-dark);
-            box-shadow: 0 6px 16px rgba(0, 212, 255, 0.18);
+            box-shadow: 0 8px 20px rgba(0, 212, 255, 0.2);
         }
 
         .btn-export:hover {
-            background: linear-gradient(135deg, #00e5ff, #00d0eb);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 212, 255, 0.25);
+            background: linear-gradient(135deg, #00e5ff, #00d4e8);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px rgba(0, 212, 255, 0.3);
         }
 
         .status-msg {
-            font-size: 0.8rem;
-            margin-top: 10px;
-            padding: 10px 12px;
-            border-radius: 7px;
+            font-size: 0.85rem;
+            margin-top: 12px;
+            padding: 12px 16px;
+            border-radius: 8px;
             display: none;
-            animation: slideDown 0.25s ease-out;
-            border-left: 3px solid;
+            animation: slideDown 0.3s ease-out;
+            border-left: 4px solid;
+            backdrop-filter: blur(10px);
         }
 
         .status-msg.success {
-            background: rgba(80, 250, 123, 0.08);
+            background: rgba(80, 250, 123, 0.1);
             color: var(--accent-green);
             border-left-color: var(--accent-green);
         }
 
         .status-msg.error {
-            background: rgba(255, 85, 85, 0.08);
+            background: rgba(255, 85, 85, 0.1);
             color: var(--accent-red);
             border-left-color: var(--accent-red);
         }
@@ -442,24 +441,24 @@
         .task-item {
             display: flex;
             align-items: center;
-            gap: 10px;
-            background: rgba(189, 147, 249, 0.04);
-            padding: 10px 12px;
-            border-radius: 7px;
-            margin-bottom: 8px;
+            gap: 12px;
+            background: rgba(189, 147, 249, 0.05);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 10px;
             border-left: 3px solid var(--accent-purple);
-            transition: all 0.25s ease;
+            transition: all 0.3s ease;
         }
 
         .task-item.done {
-            opacity: 0.5;
+            opacity: 0.6;
             border-left-color: var(--accent-green);
-            background: rgba(80, 250, 123, 0.04);
+            background: rgba(80, 250, 123, 0.05);
         }
 
         .task-item input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
             cursor: pointer;
             accent-color: var(--accent-green);
         }
@@ -469,65 +468,47 @@
             margin: 0;
             cursor: pointer;
             font-weight: 600;
-            font-size: 0.85rem;
         }
 
         .task-item.done label {
             text-decoration: line-through;
-            color: var(--text-subtle);
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 6px;
-            background: rgba(189, 147, 249, 0.1);
-            border-radius: 3px;
-            overflow: hidden;
-            margin-bottom: 12px;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent-green), var(--accent-blue));
-            transition: width 0.3s ease;
+            color: var(--text-dim);
         }
 
         .log-entry {
-            background: rgba(189, 147, 249, 0.04);
-            border-left: 3px solid var(--accent-orange);
-            padding: 12px;
-            margin-bottom: 10px;
-            border-radius: 7px;
-            font-size: 0.8rem;
-            transition: all 0.25s ease;
+            background: linear-gradient(135deg, rgba(189, 147, 249, 0.05), rgba(0, 212, 255, 0.05));
+            border-left: 4px solid var(--accent-orange);
+            padding: 16px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
             cursor: pointer;
         }
 
         .log-entry:hover {
-            transform: translateX(3px);
+            transform: translateX(4px);
             border-left-color: var(--accent-purple);
-            background: rgba(189, 147, 249, 0.08);
-            box-shadow: 0 3px 10px rgba(189, 147, 249, 0.08);
+            background: linear-gradient(135deg, rgba(189, 147, 249, 0.1), rgba(0, 212, 255, 0.1));
+            box-shadow: 0 4px 12px rgba(189, 147, 249, 0.1);
         }
 
         footer {
             text-align: center;
-            margin-top: 40px;
+            margin-top: 50px;
             color: var(--text-dim);
-            font-size: 0.75rem;
-            border-top: 1px solid rgba(189, 147, 249, 0.08);
-            padding-top: 16px;
-            animation: fadeInUp 0.6s ease-out 0.3s backwards;
+            font-size: 0.8rem;
+            border-top: 1px solid rgba(189, 147, 249, 0.1);
+            padding-top: 20px;
+            animation: fadeInUp 0.6s ease-out 0.4s backwards;
         }
 
         @media (max-width: 768px) {
-            body { padding: 12px; }
-            h1 { font-size: 1.8rem; }
-            header { margin-bottom: 20px; padding-bottom: 14px; }
-            .grid { grid-template-columns: 1fr; gap: 14px; }
-            .btn-group { gap: 6px; }
+            h1 { font-size: 2rem; }
+            #clock { font-size: 1.5rem; }
+            .grid { grid-template-columns: 1fr; }
+            .btn-group { flex-direction: column; }
             .btn { min-width: 100%; }
-            .tab-btn { flex: 1; min-width: 70px; padding: 8px 12px; font-size: 0.7rem; }
         }
     </style>
 </head>
@@ -537,15 +518,15 @@
         <div class="header-left">
             <div class="header-actions">
                 <a href="https://calendar.google.com" target="_blank" class="quick-btn">
-                    <i class="fas fa-calendar-alt"></i> Calendar
+                    <i class="fas fa-calendar-alt"></i> Google Calendar
                 </a>
             </div>
             <div class="system-status">
                 <div class="status-dot"></div>
-                ONLINE
+                SYSTEM ONLINE
             </div>
             <h1>⚙️ LIFE ARCHITECT</h1>
-            <div class="subtitle">Gabriele's Dashboard</div>
+            <div class="subtitle">Gabriele's Daily Dashboard</div>
         </div>
         <div class="header-right">
             <div id="clock">00:00:00</div>
@@ -565,34 +546,35 @@
         <div class="grid">
             <div class="card">
                 <div class="card-header">
-                    <i class="fas fa-check-circle"></i>
+                    <i class="fas fa-tachometer-alt"></i>
                     <div class="card-title">Status</div>
                 </div>
-                <div style="font-size: 0.85rem; line-height: 1.8; color: var(--text-dim);">
-                    <div>✓ Cloud Sync: <span style="color: var(--accent-green);">Attivo</span></div>
-                    <div>✓ Database: <span style="color: var(--accent-green);">Connesso</span></div>
-                    <div id="totalLogsCard" style="color: var(--accent-blue); font-weight: 600; margin-top: 8px;">📊 Logs: 0</div>
+                <div style="font-size: 0.9rem; line-height: 2;">
+                    <div>✓ Cloud Sync: Attivo</div>
+                    <div>✓ Database: Connesso</div>
+                    <div id="totalLogsCard" style="color: var(--accent-blue); font-weight: 600;">📊 Logs: 0</div>
+                    <div id="lastSyncCard" style="color: var(--accent-green); font-weight: 600;">🔄 Last Sync: —</div>
                 </div>
             </div>
 
             <div class="card">
                 <div class="card-header">
-                    <i class="fas fa-rocket"></i>
-                    <div class="card-title">Quick Start</div>
+                    <i class="fas fa-bolt"></i>
+                    <div class="card-title">Quick Actions</div>
                 </div>
-                <button class="btn btn-save" onclick="switchTab('dailytracker')" style="width: 100%; margin-bottom: 8px;">📝 Daily Log</button>
-                <button class="btn btn-export" onclick="switchTab('tasks')" style="width: 100%;">✅ Tasks</button>
+                <button class="btn btn-save" onclick="switchTab('dailytracker')" style="width: 100%; margin-bottom: 10px;">📝 Compila Oggi</button>
+                <button class="btn btn-export" onclick="switchTab('tasks')" style="width: 100%;">✅ Vedi Tasks</button>
             </div>
         </div>
 
-        <div class="card" style="margin-top: 14px;">
+        <div class="card" style="margin-top: 20px;">
             <div class="card-header">
-                <i class="fas fa-info-circle"></i>
-                <div class="card-title">Welcome</div>
+                <i class="fas fa-rocket"></i>
+                <div class="card-title">Benvenuto, Gabriele!</div>
             </div>
-            <div style="font-size: 0.85rem; line-height: 1.6; color: var(--text-dim);">
-                <p>Compila il tuo Daily Log ogni giorno. I tuoi dati vengono salvati automaticamente nel cloud.</p>
-                <p style="margin-top: 10px; opacity: 0.8;">Usa il tab <strong>Settings</strong> per importare/esportare i tuoi dati.</p>
+            <div style="font-size: 0.9rem; line-height: 1.8;">
+                <p>Il tuo Life Architect è pronto. Usa il tab "Today" per compilare il tuo daily log.</p>
+                <p style="color: var(--text-dim); margin-top: 10px;">Ogni giorno, registra i tuoi progressi e traccia le tue abitudini. I dati vengono salvati automaticamente nel cloud.</p>
             </div>
         </div>
     </div>
@@ -600,18 +582,18 @@
     <div id="dailytracker" class="tab-content">
         <div class="card">
             <div class="card-header">
-                <i class="fas fa-pen-fancy"></i>
+                <i class="fas fa-pencil-alt"></i>
                 <div class="card-title">Daily Log</div>
             </div>
 
             <div class="tracker-section">
                 <div class="tracker-label">📅 Base</div>
                 <div class="input-group">
-                    <label>Data</label>
+                    <label>Data:</label>
                     <input type="date" id="logDate">
                 </div>
                 <div class="input-group">
-                    <label>Sonno (ore)</label>
+                    <label>Sonno (ore):</label>
                     <input type="number" id="sleep" min="0" max="12" step="0.5">
                 </div>
             </div>
@@ -619,15 +601,15 @@
             <div class="tracker-section">
                 <div class="tracker-label">⚡ Energia (1-10)</div>
                 <div class="input-group">
-                    <label>Mattina</label>
+                    <label>Mattina:</label>
                     <input type="number" id="energyMorning" min="1" max="10">
                 </div>
                 <div class="input-group">
-                    <label>Pomeriggio</label>
+                    <label>Pomeriggio:</label>
                     <input type="number" id="energyAfternoon" min="1" max="10">
                 </div>
                 <div class="input-group">
-                    <label>Sera</label>
+                    <label>Sera:</label>
                     <input type="number" id="energyEvening" min="1" max="10">
                 </div>
             </div>
@@ -635,11 +617,11 @@
             <div class="tracker-section">
                 <div class="tracker-label">🎭 Mood & Focus</div>
                 <div class="input-group">
-                    <label>Umore</label>
+                    <label>Umore:</label>
                     <input type="text" id="mood" placeholder="Energico, Calmo, Stressato...">
                 </div>
                 <div class="input-group">
-                    <label>Focus (3 righe)</label>
+                    <label>Focus (3 righe max):</label>
                     <textarea id="focus" placeholder="1) Primo obiettivo&#10;2) Secondo obiettivo&#10;3) Terzo obiettivo"></textarea>
                 </div>
             </div>
@@ -647,46 +629,46 @@
             <div class="tracker-section">
                 <div class="tracker-label">✅ Azioni</div>
                 <div class="input-group">
-                    <label>Azione 1</label>
-                    <input type="text" id="action1" placeholder="Descrivi la prima azione">
+                    <label>Azione 1:</label>
+                    <input type="text" id="action1" placeholder="Descrivi la prima azione completata">
                 </div>
                 <div class="input-group">
-                    <label>Azione 2</label>
-                    <input type="text" id="action2" placeholder="Descrivi la seconda azione">
+                    <label>Azione 2:</label>
+                    <input type="text" id="action2" placeholder="Descrivi la seconda azione completata">
                 </div>
                 <div class="input-group">
-                    <label>Azione 3</label>
-                    <input type="text" id="action3" placeholder="Descrivi la terza azione">
+                    <label>Azione 3:</label>
+                    <input type="text" id="action3" placeholder="Descrivi la terza azione completata">
                 </div>
                 <div class="input-group">
-                    <label>Azione 4</label>
-                    <input type="text" id="action4" placeholder="Descrivi la quarta azione">
+                    <label>Azione 4:</label>
+                    <input type="text" id="action4" placeholder="Descrivi la quarta azione completata">
                 </div>
                 <div class="input-group">
-                    <label>Azione 5</label>
-                    <input type="text" id="action5" placeholder="Descrivi la quinta azione">
+                    <label>Azione 5:</label>
+                    <input type="text" id="action5" placeholder="Descrivi la quinta azione completata">
                 </div>
             </div>
 
             <div class="tracker-section">
-                <div class="tracker-label">📓 Diario</div>
+                <div class="tracker-label">📓 Diario (3 righe)</div>
                 <div class="input-group">
-                    <label>Emozione principale</label>
+                    <label>1) Emozione principale del giorno:</label>
                     <input type="text" id="emotionMain" placeholder="Gioia, Frustrazione, etc.">
                 </div>
                 <div class="input-group">
-                    <label>Cosa l'ha attivata</label>
+                    <label>2) Cosa l'ha attivata:</label>
                     <input type="text" id="emotionTrigger" placeholder="Descrivi il trigger">
                 </div>
                 <div class="input-group">
-                    <label>Insight per domani</label>
+                    <label>3) Insight per domani:</label>
                     <input type="text" id="emotionInsight" placeholder="Cosa mi porto a domani">
                 </div>
             </div>
 
             <div class="btn-group">
                 <button class="btn btn-save" onclick="saveDailyLog()">💾 Salva & Sync</button>
-                <button class="btn btn-export" onclick="switchTab('logs')">📋 Vedi Log</button>
+                <button class="btn btn-export" onclick="exportCSV()">📥 Export CSV</button>
             </div>
             <div class="status-msg" id="statusMsg"></div>
         </div>
@@ -695,46 +677,42 @@
     <div id="tasks" class="tab-content">
         <div class="card">
             <div class="card-header">
-                <i class="fas fa-list-check"></i>
+                <i class="fas fa-tasks"></i>
                 <div class="card-title">Daily Tasks</div>
             </div>
-
+            <div id="tasksList" style="margin-bottom: 20px;"></div>
             <div class="input-group">
-                <label>Nuovo task</label>
+                <label>Aggiungi nuovo task:</label>
                 <input type="text" id="newTask" placeholder="Es: Completare relazione">
             </div>
-            <button class="btn btn-save" onclick="addTask()" style="width: 100%; margin-bottom: 16px;">➕ Aggiungi</button>
-
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            <div class="btn-group">
+                <button class="btn btn-save" onclick="addTask()" style="width: 100%;">➕ Aggiungi Task</button>
             </div>
+        </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; font-size: 0.8rem;">
-                <div style="text-align: center; padding: 10px; background: rgba(80, 250, 123, 0.05); border-radius: 6px;">
-                    <div style="color: var(--accent-green); font-weight: 700;">
-                        <span id="tasksDone">0</span> Done
-                    </div>
-                </div>
-                <div style="text-align: center; padding: 10px; background: rgba(255, 184, 108, 0.05); border-radius: 6px;">
-                    <div style="color: var(--accent-orange); font-weight: 700;">
-                        <span id="tasksPending">0</span> Pending
-                    </div>
-                </div>
+        <div class="card" style="margin-top: 20px;">
+            <div class="card-header">
+                <i class="fas fa-chart-pie"></i>
+                <div class="card-title">Tasks Summary</div>
             </div>
-
-            <div id="tasksList"></div>
+            <div style="font-size: 0.9rem; line-height: 2;">
+                <div>✓ Completati: <span id="tasksDone" style="color: var(--accent-green); font-weight: 600;">0</span></div>
+                <div>⏳ Rimasti: <span id="tasksPending" style="color: var(--accent-orange); font-weight: 600;">0</span></div>
+                <div>📊 Percentuale: <span id="tasksPercent" style="color: var(--accent-blue); font-weight: 600;">0%</span></div>
+            </div>
         </div>
     </div>
 
     <div id="logs" class="tab-content">
         <div class="card">
             <div class="card-header">
-                <i class="fas fa-book"></i>
+                <i class="fas fa-history"></i>
                 <div class="card-title">Recent Logs</div>
             </div>
-            <div id="logsContainer" style="max-height: 600px; overflow-y: auto;">
-                <p style="color: var(--text-dim); font-size: 0.85rem;">Loading...</p>
+            <div id="logsContainer" style="max-height: 700px; overflow-y: auto;">
+                <p style="color: var(--text-dim);">Loading...</p>
             </div>
+            <button class="btn btn-export" onclick="loadRecentLogs()" style="width: 100%; margin-top: 20px;">🔄 Refresh</button>
         </div>
     </div>
 
@@ -743,31 +721,31 @@
             <div class="card">
                 <div class="card-header">
                     <i class="fas fa-download"></i>
-                    <div class="card-title">Export</div>
+                    <div class="card-title">Export Data</div>
                 </div>
-                <button class="btn btn-export" onclick="exportCSV()" style="width: 100%; margin-bottom: 8px;">📊 CSV</button>
+                <button class="btn btn-export" onclick="exportCSV()" style="width: 100%; margin-bottom: 10px;">📊 CSV</button>
                 <button class="btn btn-export" onclick="exportJSON()" style="width: 100%;">📦 JSON</button>
             </div>
 
             <div class="card">
                 <div class="card-header">
                     <i class="fas fa-upload"></i>
-                    <div class="card-title">Import</div>
+                    <div class="card-title">Import Data</div>
                 </div>
                 <input type="file" id="jsonImport" accept=".json" style="margin-bottom: 10px;">
-                <button class="btn btn-save" onclick="importJSON()" style="width: 100%;">📥 Import</button>
+                <button class="btn btn-save" onclick="importJSON()" style="width: 100%;">📥 Importa</button>
             </div>
         </div>
         <div class="status-msg" id="importStatus"></div>
     </div>
 
     <footer>
-        <p>⚙️ LIFE ARCHITECT v4.1 | Cloud Dashboard</p>
-        <p>Auto-synced data • Responsive design</p>
+        <p>⚙️ Life Architect v3.0 | Cloud-Powered Dashboard</p>
+        <p>Dati sincronizzati automaticamente nel cloud</p>
     </footer>
 
     <script>
-        const JSONBIN_API_KEY = '$2a$10$rBcG1mw1tfWsib4QC/sLY.sxb4lRtrIaP8i5Jp1rqVD8t6yWiJ2YK;
+        const JSONBIN_API_KEY = '$2a$10$rBcG1mw1tfWsib4QC/sLY.sxb4lRtrIaP8i5Jp1rqVD8t6yWiJ2YK';
         const BIN_ID = '69307d46d0ea881f4010b0d3';
         const JSONBIN_BASE_URL = 'https://api.jsonbin.io/v3';
         let tasks = [];
@@ -775,7 +753,7 @@
         function updateClock() {
             const now = new Date();
             document.getElementById('clock').textContent = now.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            document.getElementById('date').textContent = now.toLocaleDateString('it-IT', { weekday: 'short', month: 'short', day: '2-digit' });
+            document.getElementById('date').textContent = now.toLocaleDateString('it-IT', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
         }
         setInterval(updateClock, 1000);
         updateClock();
@@ -793,7 +771,7 @@
             const el = document.getElementById(elemId);
             el.textContent = msg;
             el.className = 'status-msg ' + (isSuccess ? 'success' : 'error');
-            setTimeout(() => el.className = 'status-msg', 4500);
+            setTimeout(() => el.className = 'status-msg', 5000);
         }
 
         function renderTasks() {
@@ -826,18 +804,18 @@
             const percent = total ? Math.round((done / total) * 100) : 0;
             document.getElementById('tasksDone').textContent = done;
             document.getElementById('tasksPending').textContent = total - done;
-            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('tasksPercent').textContent = percent + '%';
         }
 
         async function saveDailyLog() {
             if(!JSONBIN_API_KEY) {
-                showStatus('⚠️ Aggiungi Master Key nel codice', false);
+                showStatus('⚠️ Aggiungi il Master Key nel codice per sincronizzare!', false);
                 return;
             }
 
             const logDate = document.getElementById('logDate').value;
             if(!logDate) {
-                showStatus('❌ Seleziona una data', false);
+                showStatus('❌ Seleziona una data!', false);
                 return;
             }
 
@@ -865,6 +843,7 @@
                 const response = await fetch(`${JSONBIN_BASE_URL}/b/${BIN_ID}`, {
                     headers: { 'X-Master-Key': JSONBIN_API_KEY }
                 });
+
                 if(!response.ok) throw new Error('Load failed');
 
                 const data = await response.json();
@@ -882,22 +861,37 @@
 
                 if(!updateRes.ok) throw new Error('Save failed');
 
-                showStatus('✓ Log salvato!', true);
+                showStatus('✓ Log salvato e sincronizzato nel cloud!', true);
                 document.getElementById('totalLogsCard').textContent = '📊 Logs: ' + allLogs.length;
+                document.getElementById('lastSyncCard').textContent = '🔄 Last Sync: ' + new Date().toLocaleTimeString('it-IT');
 
                 document.getElementById('logDate').valueAsDate = new Date();
-                ['sleep', 'energyMorning', 'energyAfternoon', 'energyEvening', 'mood', 'focus', 'action1', 'action2', 'action3', 'action4', 'action5', 'emotionMain', 'emotionTrigger', 'emotionInsight'].forEach(id => document.getElementById(id).value = '');
+                document.getElementById('sleep').value = '';
+                document.getElementById('energyMorning').value = '';
+                document.getElementById('energyAfternoon').value = '';
+                document.getElementById('energyEvening').value = '';
+                document.getElementById('mood').value = '';
+                document.getElementById('focus').value = '';
+                document.getElementById('action1').value = '';
+                document.getElementById('action2').value = '';
+                document.getElementById('action3').value = '';
+                document.getElementById('action4').value = '';
+                document.getElementById('action5').value = '';
+                document.getElementById('emotionMain').value = '';
+                document.getElementById('emotionTrigger').value = '';
+                document.getElementById('emotionInsight').value = '';
                 tasks = [];
                 renderTasks();
+
                 loadRecentLogs();
             } catch(e) {
-                showStatus('❌ ' + e.message, false);
+                showStatus('❌ Errore: ' + e.message, false);
             }
         }
 
         async function loadRecentLogs() {
             if(!JSONBIN_API_KEY) {
-                document.getElementById('logsContainer').innerHTML = '<p style="color: var(--accent-orange); font-size: 0.85rem;">⚠️ Aggiungi Master Key</p>';
+                document.getElementById('logsContainer').innerHTML = '<p style="color: var(--accent-orange);">⚠️ Aggiungi il Master Key per visualizzare i log.</p>';
                 return;
             }
 
@@ -905,6 +899,7 @@
                 const response = await fetch(`${JSONBIN_BASE_URL}/b/${BIN_ID}`, {
                     headers: { 'X-Master-Key': JSONBIN_API_KEY }
                 });
+
                 if(!response.ok) throw new Error('Load failed');
 
                 const data = await response.json();
@@ -912,36 +907,48 @@
 
                 let html = '';
                 if(logs.length === 0) {
-                    html = '<p style="color: var(--text-dim); font-size: 0.85rem;">Nessun log.</p>';
+                    html = '<p style="color: var(--text-dim);">Nessun log ancora.</p>';
                 } else {
                     logs.forEach(log => {
                         html += `
                             <div class="log-entry">
                                 <strong>📅 ${log.date}</strong><br>
-                                💤 ${log.sleep}h | ⚡ ${log.energyMorning}-${log.energyAfternoon}-${log.energyEvening} | 😊 ${log.mood}
+                                Sonno: ${log.sleep}h | Energia: ${log.energyMorning}-${log.energyAfternoon}-${log.energyEvening} | Umore: ${log.mood}<br>
+                                ${log.emotionMain}
                             </div>
                         `;
                     });
                 }
+
                 document.getElementById('logsContainer').innerHTML = html;
             } catch(e) {
-                document.getElementById('logsContainer').innerHTML = '<p style="color: var(--accent-red); font-size: 0.85rem;">❌ ' + e.message + '</p>';
+                document.getElementById('logsContainer').innerHTML = '<p style="color: var(--accent-red);">❌ Errore: ' + e.message + '</p>';
             }
         }
 
         async function exportCSV() {
-            if(!JSONBIN_API_KEY) { showStatus('⚠️ Aggiungi Master Key', false, 'importStatus'); return; }
+            if(!JSONBIN_API_KEY) {
+                showStatus('⚠️ Aggiungi il Master Key nel codice!', false, 'importStatus');
+                return;
+            }
+
             try {
-                const response = await fetch(`${JSONBIN_BASE_URL}/b/${BIN_ID}`, { headers: { 'X-Master-Key': JSONBIN_API_KEY } });
+                const response = await fetch(`${JSONBIN_BASE_URL}/b/${BIN_ID}`, {
+                    headers: { 'X-Master-Key': JSONBIN_API_KEY }
+                });
+
                 if(!response.ok) throw new Error('Load failed');
+
                 const data = await response.json();
                 const logs = data.record.dailyLogs || [];
-                let csv = 'Data,Sonno,Mattina,Pomeriggio,Sera,Umore,Azione1,Azione2,Azione3,Azione4,Azione5,Emozione
+
+                let csv = 'Data,Sonno,En_Matt,En_Pom,En_Sera,Umore,Azione1,Azione2,Azione3,Azione4,Azione5,Emozione
 ';
                 logs.forEach(log => {
                     csv += `"${log.date}","${log.sleep}","${log.energyMorning}","${log.energyAfternoon}","${log.energyEvening}","${log.mood}","${log.action1}","${log.action2}","${log.action3}","${log.action4}","${log.action5}","${log.emotionMain}"
 `;
                 });
+
                 const blob = new Blob([csv], { type: 'text/csv' });
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
@@ -949,53 +956,84 @@
                 a.download = 'LifeArchitect_' + new Date().toISOString().slice(0, 10) + '.csv';
                 a.click();
                 window.URL.revokeObjectURL(url);
-                showStatus('✓ CSV esportato', true, 'importStatus');
+                showStatus('✓ CSV esportato!', true, 'importStatus');
             } catch(e) {
-                showStatus('❌ ' + e.message, false, 'importStatus');
+                showStatus('❌ Errore export: ' + e.message, false, 'importStatus');
             }
         }
 
         async function exportJSON() {
-            if(!JSONBIN_API_KEY) { showStatus('⚠️ Aggiungi Master Key', false, 'importStatus'); return; }
+            if(!JSONBIN_API_KEY) {
+                showStatus('⚠️ Aggiungi il Master Key nel codice!', false, 'importStatus');
+                return;
+            }
+
             try {
-                const response = await fetch(`${JSONBIN_BASE_URL}/b/${BIN_ID}`, { headers: { 'X-Master-Key': JSONBIN_API_KEY } });
+                const response = await fetch(`${JSONBIN_BASE_URL}/b/${BIN_ID}`, {
+                    headers: { 'X-Master-Key': JSONBIN_API_KEY }
+                });
+
                 if(!response.ok) throw new Error('Load failed');
+
                 const data = await response.json();
+
                 const blob = new Blob([JSON.stringify(data.record, null, 2)], { type: 'application/json' });
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = 'LifeArchitect_' + new Date().toISOString().slice(0, 10) + '.json';
+                a.download = 'LifeArchitect_Backup_' + new Date().toISOString().slice(0, 10) + '.json';
                 a.click();
                 window.URL.revokeObjectURL(url);
-                showStatus('✓ JSON backup esportato', true, 'importStatus');
+                showStatus('✓ JSON backup esportato!', true, 'importStatus');
             } catch(e) {
-                showStatus('❌ ' + e.message, false, 'importStatus');
+                showStatus('❌ Errore export: ' + e.message, false, 'importStatus');
             }
         }
 
         async function importJSON() {
             const file = document.getElementById('jsonImport').files[0];
-            if(!file) { showStatus('⚠️ Seleziona file JSON', false, 'importStatus'); return; }
-            if(!JSONBIN_API_KEY) { showStatus('⚠️ Aggiungi Master Key', false, 'importStatus'); return; }
+            if(!file) {
+                showStatus('⚠️ Seleziona un file JSON!', false, 'importStatus');
+                return;
+            }
+
+            if(!JSONBIN_API_KEY) {
+                showStatus('⚠️ Aggiungi il Master Key!', false, 'importStatus');
+                return;
+            }
+
             try {
                 const text = await file.text();
                 const importedData = JSON.parse(text);
-                const response = await fetch(`${JSONBIN_BASE_URL}/b/${BIN_ID}`, { headers: { 'X-Master-Key': JSONBIN_API_KEY } });
+
+                const response = await fetch(`${JSONBIN_BASE_URL}/b/${BIN_ID}`, {
+                    headers: { 'X-Master-Key': JSONBIN_API_KEY }
+                });
+
                 if(!response.ok) throw new Error('Load failed');
+
                 const data = await response.json();
                 const allLogs = data.record.dailyLogs || [];
-                if(importedData.dailyLogs && Array.isArray(importedData.dailyLogs)) { allLogs.push(...importedData.dailyLogs); }
+
+                if(importedData.dailyLogs && Array.isArray(importedData.dailyLogs)) {
+                    allLogs.push(...importedData.dailyLogs);
+                }
+
                 const updateRes = await fetch(`${JSONBIN_BASE_URL}/b/${BIN_ID}`, {
                     method: 'PUT',
-                    headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': JSONBIN_API_KEY
+                    },
                     body: JSON.stringify({ ...data.record, dailyLogs: allLogs })
                 });
+
                 if(!updateRes.ok) throw new Error('Save failed');
-                showStatus('✓ ' + (importedData.dailyLogs ? importedData.dailyLogs.length : 0) + ' log importati', true, 'importStatus');
+
+                showStatus('✓ Dati importati: ' + (importedData.dailyLogs ? importedData.dailyLogs.length : 0) + ' log aggiunti!', true, 'importStatus');
                 loadRecentLogs();
             } catch(e) {
-                showStatus('❌ ' + e.message, false, 'importStatus');
+                showStatus('❌ Errore import: ' + e.message, false, 'importStatus');
             }
         }
 
